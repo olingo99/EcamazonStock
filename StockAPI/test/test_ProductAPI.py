@@ -4,7 +4,6 @@ from ..models import Product
 import json
 # Create your tests here.
 
-
 class ProductListAPITests(TestCase):
     def test_create_product(self):
         response = self.client.post('/StockAPI/product', {
@@ -43,8 +42,9 @@ class ProductDetalAPITests(TestCase):
     def test_get_product(self):
         for _ in range(5):
             Product.objects.create(
-                Name='testname',
-                User=self.user
+            Quantity= 1,
+            Location= 'testlocation',
+            ProductName= 'testname'
             )
         response = self.client.get('/SmartGalleryAPI/ProductApi/1')
         self.assertEqual(response.status_code, 200)
@@ -60,8 +60,9 @@ class ProductDetalAPITests(TestCase):
     def test_delete_product(self):
         for _ in range(5):
             Product.objects.create(
-                Name='testname',
-                User=self.user
+                            Quantity= 1,
+            Location= 'testlocation',
+            ProductName= 'testname'
             )
         response = self.client.delete('/SmartGalleryAPI/ProductApi/1')
         self.assertEqual(response.status_code, 200)
@@ -72,8 +73,9 @@ class ProductDetalAPITests(TestCase):
 
     def test_update_product(self):
         Product.objects.create(
-            Name='testname',
-            User=self.user
+            Quantity= 1,
+            Location= 'testlocation',
+            ProductName= 'testname'
         )
         response = self.client.put('/SmartGalleryAPI/ProductApi/1', {
             'Name': 'testname2',
