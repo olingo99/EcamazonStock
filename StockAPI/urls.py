@@ -20,6 +20,11 @@ from .views.HandlerViews import (
     HandlerListAPIView
 )
 
+from .views.CategoryViews import (
+    CategoryDetailAPIView,
+    CategoryListAPIView
+)
+
 
 app_name = "StockAPI"
 urlpatterns = [
@@ -33,5 +38,8 @@ urlpatterns = [
 
     path("handler",HandlerListAPIView.as_view()),
     path("handler/<int:handler_id>",HandlerDetailAPIView.as_view()),
+
+    path("category",CategoryListAPIView.as_view()),
+    path("category/<int:category_id>",CategoryDetailAPIView.as_view()),
 
 ]

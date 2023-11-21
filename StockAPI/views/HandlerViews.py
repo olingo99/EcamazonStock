@@ -6,32 +6,32 @@ from ..models import Handler
 from ..serializers import HandlerSerializer
 
 class HandlerListAPIView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        '''
+        List all the Handler items
+        '''
+        handlers = Handler.objects.all()
+        serializer = HandlerSerializer(handlers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 2. Create
+    def post(self, request, *args, **kwargs):
+        '''
+        Create the Handler with given handler data
+        '''
+        data = { 
+            'HandlerName':request.data.get('HandlerName'),
+            'HandlerSurname':request.data.get('HandlerSurname'),
+            'HandlerAddress':request.data.get('HandlerAddress')
+        }
+        serializer = HandlerSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-        def get(self, request, *args, **kwargs):
-            '''
-            List all the Handler items
-            '''
-            handlers = Handler.objects.all()
-            serializer = HandlerSerializer(handlers, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-    
-        # 2. Create
-        def post(self, request, *args, **kwargs):
-            '''
-            Create the Handler with given handler data
-            '''
-            data = { 
-                'HandlerName':request.data.get('HandlerName'),
-                'HandlerSurname':request.data.get('HandlerSurname'),
-                'HandlerAddress':request.data.get('HandlerAddress')
-            }
-            serializer = HandlerSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
 class HandlerDetailAPIView(APIView):
     def get_object(self, handler_id):
         '''
