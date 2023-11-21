@@ -1,19 +1,36 @@
 from rest_framework import serializers
-from .models import Product, Order, OrderProductLink
+from .models import *
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ["ProductId", "Quantity", "Location", "ProductName"]
+        fields = ["ProductCode", "Quantity", "ProductName", "WhareHouseId", "CategoryId"]
 
-
-class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = ["OrderId","OrderDate","UserId","State", "ParcelId"]
 
 
 class OrderProductLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderProductLink
-        fields = ["OrderId","ProductId","ProductQuantity"]
+        fields = ["OrderId","ProductId","HandlerId","ProductQuantity"]
+
+class OrderSerializer(serializers.ModelSerializer):
+    products = OrderProductLinkSerializer(many=True, read_only=True)
+    class Meta:
+        model = Order
+        fields = ["OrderId","OrderDate","UserId","State", "ParcelId", "Products"]
+
+
+class WhareHouseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WhareHouse
+        fields = ["WhareHouseId","WhareHouseName","WhareHouseLocation"]
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["CategoryId","CategoryName","CategoryDescription"]
+
+class HandlerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Handler
+        fields = ["HandlerId","HandlerName","HandlerSurname","HandlerAddress"]

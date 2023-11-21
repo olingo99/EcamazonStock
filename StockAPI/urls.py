@@ -10,6 +10,16 @@ from .views.OrderViews import (
     OrderListAPIView,
 )
 
+from .views.WhareHouseViews import (
+    WhareHouseListAPIView,
+    WhareHouseDetailAPIView
+)
+
+from .views.HandlerViews import (
+    HandlerDetailAPIView,
+    HandlerListAPIView
+)
+
 
 app_name = "StockAPI"
 urlpatterns = [
@@ -17,5 +27,11 @@ urlpatterns = [
     path('product/<int:productId>',ProductDetailAPIView.as_view()),
     path("product",ProductListAPIView.as_view()),
     path("order",OrderListAPIView.as_view()),
+
+    path("wharehouse",WhareHouseListAPIView.as_view()),
+    path("wharehouse/<int:wharehouse_id>",WhareHouseDetailAPIView.as_view()),
+
+    path("handler",HandlerListAPIView.as_view()),
+    path("handler/<int:handler_id>",HandlerDetailAPIView.as_view()),
 
 ]
