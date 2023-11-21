@@ -10,7 +10,7 @@ class ProductListAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         '''
-        List all the Product items for given requested user
+        List all the Product items
         '''
         products = Product.objects.filter(ProductName__contains = "")
         print(products)
