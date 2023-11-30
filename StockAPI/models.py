@@ -30,7 +30,7 @@ class Order(models.Model):
     OrderDate = models.DateTimeField(auto_now_add=True)
     UserId = models.IntegerField(db_index=True)
     State = models.TextField(choices=[("Sent","Sent"),("Delivered","Delivered"),("Processing","Processing")])
-    ParcelId = models.IntegerField()
+    ParcelId = models.CharField(max_length=10)
     Products = models.ManyToManyField(Product, through='OrderProductLink')
 
 class Handler(models.Model):

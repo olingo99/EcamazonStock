@@ -60,7 +60,7 @@ class WhareHouseDetailAPIView(APIView):
         
         wharehouse = self.get_object(wharehouse_id)
         if wharehouse is None:
-            print("wharehouse not found")
+            # print("wharehouse not found")
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = WhareHouseSerializer(wharehouse, data=request.data)
         if serializer.is_valid():

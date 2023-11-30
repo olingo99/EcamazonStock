@@ -8,6 +8,7 @@ from .views.ProductViews import (
 
 from .views.OrderViews import (
     OrderListAPIView,
+    OrderDetailAPIView
 )
 
 from .views.WhareHouseViews import (
@@ -32,6 +33,7 @@ urlpatterns = [
     # path('product/<int:productId>',ProductDetailAPIView.as_view()),
     path("product",ProductListAPIView.as_view()),
     path("order",OrderListAPIView.as_view()),
+    path("order/<int:orderId>",OrderDetailAPIView.as_view()),
 
     path("wharehouse",WhareHouseListAPIView.as_view()),
     path("wharehouse/<int:wharehouse_id>",WhareHouseDetailAPIView.as_view()),

@@ -8,29 +8,29 @@ from ..serializers import CategorySerializer
 
 class CategoryListAPIView(APIView):
         
-            def get(self, request, *args, **kwargs):
-                '''
-                List all the Category items
-                '''
-                categories = Category.objects.all()
-                serializer = CategorySerializer(categories, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-        
-            # 2. Create
-            def post(self, request, *args, **kwargs):
-                '''
-                Create the Category with given category data
-                '''
-                data = { 
-                    'CategoryName':request.data.get('CategoryName'),
-                    'CategoryDescription':request.data.get('CategoryDescription')
-                }
-                serializer = CategorySerializer(data=data)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, *args, **kwargs):
+        '''
+        List all the Category items
+        '''
+        categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 2. Create
+    def post(self, request, *args, **kwargs):
+        '''
+        Create the Category with given category data
+        '''
+        data = { 
+            'CategoryName':request.data.get('CategoryName'),
+            'CategoryDescription':request.data.get('CategoryDescription')
+        }
+        serializer = CategorySerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CategoryDetailAPIView(APIView):
     def get_object(self, category_id):

@@ -23,7 +23,7 @@ class ProductListAPIView(APIView):
             'Quantity':request.data.get('Quantity'),
             'ProductName':request.data.get('ProductName'),
             'CategoryId':request.data.get('CategoryId'),
-            'WarehouseId':request.data.get('WarehouseId'),
+            'WhareHouseId':request.data.get('WhareHouseId'),
         }
         serializer = ProductSerializer(data=data)
         if serializer.is_valid():

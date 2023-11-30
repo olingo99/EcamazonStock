@@ -1,100 +1,27 @@
-# from django.test import TestCase
-# from ..models import Order
-# import json
+from django.test import TestCase
+from ..models import Order, Product, WhareHouse, Category, OrderProductLink, Handler
+import json
 
-# class OrderListAPITests(TestCase):
-#     def test_create_order(self):
-#         response = self.client.post('/StockAPI/order', {
-#             'OrderDate': '2020-01-01',
-#             'UserId': 1,
-#             'State': 'Sent',
-#             'ParcelId': 1
-#         })
-#         self.assertEqual(response.status_code, 201)
-#         self.assertEqual(Order.objects.count(), 1)
-#         self.assertEqual(Order.objects.get().OrderDate, '2020-01-01')
-#         self.assertEqual(Order.objects.get().UserId, 1)
-#         self.assertEqual(Order.objects.get().State, 'Sent')
-#         self.assertEqual(Order.objects.get().ParcelId, 1)
-
-#     def test_get_orders(self):
-#         for _ in range(5):
-#             Order.objects.create(
-#                 OrderDate='2020-01-01',
-#                 UserId=1,
-#                 State='Sent',
-#                 ParcelId=1
-#             )
-#         response = self.client.get('/StockAPI/order')
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(len(response.data), 5)
-#         self.assertEqual(response.data[0]['UserId'], 1)
-#         self.assertEqual(response.data[0]['State'], 'Sent')
-#         self.assertEqual(response.data[0]['ParcelId'], 1)
-
-#     def test_get_orders_not_found(self):
-#         response = self.client.get('/StockAPI/order')
-#         self.assertEqual(response.status_code, 200)
-
-# class OrderDetailAPITests(TestCase):
-
-#     def test_get_order(self):
-#         for _ in range(5):
-#             Order.objects.create(
-#                 OrderDate='2020-01-01',
-#                 UserId=1,
-#                 State='Sent',
-#                 ParcelId=1
-#             )
-#         response = self.client.get('/StockAPI/order/1')
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.data['UserId'], 1)
-#         self.assertEqual(response.data['State'], 'Sent')
-#         self.assertEqual(response.data['ParcelId'], 1)
-
-#     def test_get_order_not_found(self):
+class OrderListAPITests(TestCase):
+    def setUp(self):
+        # self.client = APIClient()
+        self.warehouse = WhareHouse.objects.create(WhareHouseName='Warehouse1', WhareHouseLocation='Location1')
+        self.category = Category.objects.create(CategoryName='Category1', CategoryDescription='Description1')
+        self.product1 = Product.objects.create(Quantity=100, ProductName='Product1', WhareHouseId=self.warehouse, CategoryId=self.category)
+        self.product2 = Product.objects.create(Quantity=200, ProductName='Product2', WhareHouseId=self.warehouse, CategoryId=self.category)
+        self.handler = Handler.objects.create(HandlerName='Handler1', HandlerSurname='Surname1', HandlerAddress='Address1')
         
-#         response = self.client.get('/StockAPI/order/1')
-
-#         self.assertEqual(response.status_code, 400)
-
-#     def test_delete_order(self):
-#         for _ in range(5):
-#             Order.objects.create(
-#                 OrderDate='2020-01-01',
-#                 UserId=1,
-#                 State='Sent',
-#                 ParcelId=1
-#             )
-#         response = self.client.delete('/StockAPI/order/1')
-#         self.assertEqual(response.status_code, 200)
-
-#     def test_delete_order_not_found(self):
-#         response = self.client.delete('/StockAPI/order/1')
-#         self.assertEqual(response.status_code, 400)
-
-#     def test_update_order(self):
-#         Order.objects.create(
-#             OrderDate='2020-01-01',
-#             UserId=1,
-#             State='Sent',
-#             ParcelId=1
-#         )
-#         response = self.client.put('/StockAPI/order/1', {
-#             'OrderDate': '2020-01-01',
-#             'UserId': 1,
-#             'State': 'Sent',
-#             'ParcelId': 1
-#         })
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(Order.objects.get().OrderDate, '2020-01-01')
-#         self.assertEqual(Order.objects.get().UserId, 1)
-#         self.assertEqual(Order.objects.get().State, 'Sent')
-#         self.assertEqual(Order.objects.get().ParcelId, 1)
-        
-
-    
-
-        
-
-
+    def test_create_order(self):
+        response = self.client.post('/StockAPI/order', json.dumps({
+            'UserId': 1,
+            'Products': [
+                {'ProductCode': int(self.product1.ProductCode), 'Quantity': 10},
+                {'ProductCode': int(self.product2.ProductCode), 'Quantity': 20}
+            ]
+        }), content_type='application/json')
+        print(response.content)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(Order.objects.get().UserId, 1)
+        self.assertEqual(Order.objects.get().State, 'Processing')
+        self.assertEqual(OrderProductLink.objects.count(), 2)
