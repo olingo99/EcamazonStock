@@ -29,7 +29,7 @@ class Order(models.Model):
     OrderId = models.AutoField(primary_key=True)
     OrderDate = models.DateTimeField(auto_now_add=True)
     UserId = models.IntegerField(db_index=True)
-    State = models.TextField(choices=[("Sent","Sent"),("Delivered","Delivered"),("Processing","Processing")])
+    State = models.TextField(choices=[("Sent","Sent"),("Delivered","Delivered"),("Processing","Processing"), ('Cancelled', 'Cancelled')], default="Processing")
     ParcelId = models.CharField(max_length=10)
     Products = models.ManyToManyField(Product, through='OrderProductLink')
 

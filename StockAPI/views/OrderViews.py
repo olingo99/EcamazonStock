@@ -108,29 +108,32 @@ class OrderDetailAPIView(APIView):
         serializer = OrderSerializer(order)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def put(self, request, productId, *args, **kwargs):
+    def put(self, request, orderId, *args, **kwargs):
         '''
         Update the Order with given order_id
         '''
-        order = self.get_object(productId)
+        order = self.get_object(orderId)
         if not order:
             return Response(
-                {'error': 'Order with id: {} does not exist'.format(productId)},
+                {'error': 'Order with id: {} does not exist'.format(orderId)},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        data = { 
-            'OrderDate':request.data.get('OrderDate'),
-            'UserId':request.data.get('UserId'),
-            'State':request.data.get('State'),
-            'ParcelId':request.data.get('ParcelId')
-        }
+
+        # Check if the state is being updated to "Cancelled"
+        if request.data.get('State') == 'Cancelled' and order.State != 'Cancelled':
+            # Iterate over the OrderProductLink instances related to the order
+            for link in order.orderproductlink_set.all():
+                # Add the quantity of the product back to the Product instance
+                product = link.ProductId
+                product.Quantity += link.ProductQuantity
+                product.save()
+
         serializer = OrderSerializer(order, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
     # 5. Delete
     def delete(self, request, orderId, *args, **kwargs):
         '''
