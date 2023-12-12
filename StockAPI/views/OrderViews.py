@@ -8,6 +8,8 @@ import hashlib
 import random
 from django.db.models import Count
 from django.db.models.functions import Random
+import requests
+import json
 
 class OrderListAPIView(APIView):
 
@@ -72,6 +74,17 @@ class OrderListAPIView(APIView):
                 return Response({"error": "No handlers available"}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = OrderSerializer(order)
+
+
+        # order_json = json.dumps(serializer.data)
+
+        # response = requests.post("http://tempurl/postorder", data=order_json, headers={'Content-Type': 'application/json'})
+
+        # # Check the response
+        # if response.status_code == 200:
+        #     print("Post successful")
+        # else:
+        #     print("Post failed with status code: ", response.status_code)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class OrderFilterAPIView(APIView):

@@ -48,9 +48,11 @@ class CategoryDetailAPIView(APIView):
         Retrieve the Category with given category_id
         '''
         category = self.get_object(category_id)
+        # breakpoint()
         if category is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = CategorySerializer(category)
+        # breakpoint()
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 4. Update
