@@ -34,12 +34,13 @@ class CategoryListAPITests(TestCase):
 class CategoryDetailAPITests(TestCase):
         
             def test_get_category(self):
-                for _ in range(5):
-                    Category.objects.create(
-                        CategoryName='TestCategoryName',
-                        CategoryDescription='TestCategoryDescription'
-                    )
-                response = self.client.get('/StockAPI/category/1')
+                categories = [Category.objects.create(
+                    CategoryName='TestCategoryName',
+                    CategoryDescription='TestCategoryDescription'
+                ) for _ in range(5)]
+                response = self.client.get(f'/StockAPI/category/{categories[0].CategoryId}')
+                # breakpoint()
+                print(response.data)
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data['CategoryName'], 'TestCategoryName')
                 self.assertEqual(response.data['CategoryDescription'], 'TestCategoryDescription')
@@ -51,11 +52,11 @@ class CategoryDetailAPITests(TestCase):
                 self.assertEqual(response.status_code, 404)
         
             def test_update_category(self):
-                Category.objects.create(
+                category = Category.objects.create(
                     CategoryName='TestCategoryName',
                     CategoryDescription='TestCategoryDescription'
                 )
-                response = self.client.put('/StockAPI/category/1', {
+                response = self.client.put(f'/StockAPI/category/{category.CategoryId}', {
                     'CategoryName': 'TestCategoryNameUpdated',
                     'CategoryDescription': 'TestCategoryDescriptionUpdated'
                 },content_type='application/json')

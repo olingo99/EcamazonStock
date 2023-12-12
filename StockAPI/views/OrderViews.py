@@ -76,15 +76,15 @@ class OrderListAPIView(APIView):
         serializer = OrderSerializer(order)
 
 
-        order_json = json.dumps(serializer.data)
+        # order_json = json.dumps(serializer.data)
 
-        response = requests.post("http://tempurl/postorder", data=order_json, headers={'Content-Type': 'application/json'})
+        # response = requests.post("http://tempurl/postorder", data=order_json, headers={'Content-Type': 'application/json'})
 
-        # Check the response
-        if response.status_code == 200:
-            print("Post successful")
-        else:
-            print("Post failed with status code: ", response.status_code)
+        # # Check the response
+        # if response.status_code == 200:
+        #     print("Post successful")
+        # else:
+        #     print("Post failed with status code: ", response.status_code)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class OrderFilterAPIView(APIView):
