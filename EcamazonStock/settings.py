@@ -82,16 +82,39 @@ host = os.getenv('POSTGRES_HOST', 'localhost')
 port = os.getenv('POSTGRES_PORT', '5432')
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'stock',
+#         'USER': 'test',
+#         'PASSWORD': 'test',
+#         'HOST': host,
+#         'PORT': port,
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'stock',
+#         'USER': 'test',
+#         'PASSWORD': 'test',
+#         'HOST': 'postgres-db-service',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'stock',
-        'USER': 'test',
-        'PASSWORD': 'test',
-        'HOST': host,
-        'PORT': port,
-    }
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_PORT', 5432)
+     }
 }
+
 
 
 # DATABASES = {
