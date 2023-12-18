@@ -37,12 +37,12 @@ class HandlerDetailAPITests(TestCase):
     
         def test_get_handler(self):
             for _ in range(5):
-                Handler.objects.create(
+                handler = Handler.objects.create(
                     HandlerName='TestHandlerName',
                     HandlerSurname='TestHandlerSurname',
                     HandlerAddress='TestHandlerAddress'
                 )
-            response = self.client.get('/StockAPI/handler/1')
+            response = self.client.get(f'/StockAPI/handler/{handler.HandlerId}')
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.data['HandlerName'], 'TestHandlerName')
             self.assertEqual(response.data['HandlerSurname'], 'TestHandlerSurname')
@@ -55,12 +55,12 @@ class HandlerDetailAPITests(TestCase):
             self.assertEqual(response.status_code, 404)
     
         def test_update_handler(self):
-            Handler.objects.create(
+            handler = Handler.objects.create(
                 HandlerName='TestHandlerName',
                 HandlerSurname='TestHandlerSurname',
                 HandlerAddress='TestHandlerAddress'
             )
-            response = self.client.put('/StockAPI/handler/1', {
+            response = self.client.put(f'/StockAPI/handler/{handler.HandlerId}', {
                 'HandlerName': 'TestHandlerNameUpdated',
                 'HandlerSurname': 'TestHandlerSurnameUpdated',
                 'HandlerAddress': 'TestHandlerAddressUpdated'

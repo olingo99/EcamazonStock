@@ -31,11 +31,11 @@ class WhareHouseDetailAPITests(TestCase):
     
         def test_get_wharehouse(self):
             for _ in range(5):
-                WhareHouse.objects.create(
+                ware = WhareHouse.objects.create(
                     WhareHouseName='TestName',
                     WhareHouseLocation='TestLocation'
                 )
-            response = self.client.get('/StockAPI/wharehouse/1')
+            response = self.client.get(f'/StockAPI/wharehouse/{ware.WhareHouseId}')
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.data['WhareHouseName'], 'TestName')
             self.assertEqual(response.data['WhareHouseLocation'], 'TestLocation')
@@ -47,11 +47,11 @@ class WhareHouseDetailAPITests(TestCase):
             self.assertEqual(response.status_code, 404)
 
         def test_update_wharehouse(self):
-            WhareHouse.objects.create(
+            ware = WhareHouse.objects.create(
                 WhareHouseName='TestName',
                 WhareHouseLocation='TestLocation'
             )
-            response = self.client.put('/StockAPI/wharehouse/1', {
+            response = self.client.put(f'/StockAPI/wharehouse/{ware.WhareHouseId}', {
                 "WhareHouseName": "TestName2",
                 "WhareHouseLocation": "TestLocation2"
             },content_type='application/json')
@@ -68,11 +68,11 @@ class WhareHouseDetailAPITests(TestCase):
             self.assertEqual(response.status_code, 404)
 
         def test_delete_wharehouse(self):
-            WhareHouse.objects.create(
+            ware = WhareHouse.objects.create(
                 WhareHouseName='TestName',
                 WhareHouseLocation='TestLocation'
             )
-            response = self.client.delete('/StockAPI/wharehouse/1')
+            response = self.client.delete(f'/StockAPI/wharehouse/{ware.WhareHouseId}')
             self.assertEqual(response.status_code, 200)
             self.assertEqual(WhareHouse.objects.count(), 0)
         
