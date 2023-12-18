@@ -10,6 +10,8 @@ from django.db.models import Count
 from django.db.models.functions import Random
 import requests
 import json
+from django.shortcuts import render
+
 
 class OrderListAPIView(APIView):
 
@@ -18,9 +20,7 @@ class OrderListAPIView(APIView):
         List all the Orders
         '''
         orders = Order.objects.all()
-        print(orders)
-        serializer = OrderSerializer(orders, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return render(request, 'order_list.html', {'order_list': orders})
     
     # 2. Create
     # def post(self, request, *args, **kwargs):

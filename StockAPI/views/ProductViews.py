@@ -4,6 +4,7 @@ from rest_framework import status
 # from rest_framework import permissions
 from ..models import Product
 from ..serializers import ProductSerializer
+from django.shortcuts import render
 
 class ProductListAPIView(APIView):
     
@@ -12,8 +13,7 @@ class ProductListAPIView(APIView):
         List all the Product items
         '''
         products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return render(request, 'product_list.html', {'product_list': products})
     # 2. Create
     def post(self, request, *args, **kwargs):
         '''

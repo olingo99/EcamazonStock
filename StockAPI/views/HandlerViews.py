@@ -4,6 +4,8 @@ from rest_framework import status
 # from rest_framework import permissions
 from ..models import Handler
 from ..serializers import HandlerSerializer
+from django.shortcuts import render
+
 
 class HandlerListAPIView(APIView):
 
@@ -12,8 +14,7 @@ class HandlerListAPIView(APIView):
         List all the Handler items
         '''
         handlers = Handler.objects.all()
-        serializer = HandlerSerializer(handlers, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return render(request, 'handler_list.html', {'handler_list': handlers})
 
     # 2. Create
     def post(self, request, *args, **kwargs):

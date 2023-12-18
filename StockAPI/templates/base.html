@@ -1,0 +1,28 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ecamazon Stock</title>
+    <!-- Add your CSS files here -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/StockAPI/product">Products</a></li>
+            <li><a href="/StockAPI/order">Orders</a></li>
+            <li><a href="/StockAPI/wharehouse">Warehouses</a></li>
+            <li><a href="/StockAPI/category">Categories</a></li>
+            <li><a href="/StockAPI/handler">Handlers</a></li>
+        </ul>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+        <!-- Add your footer here -->
+    </footer>
+</body>
+</html>

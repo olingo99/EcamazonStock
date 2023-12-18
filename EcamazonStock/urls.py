@@ -21,6 +21,6 @@ from StockAPI import urls as StockAPIUrls
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('api-auth/', include('rest_framework.urls')),
-    path('StockAPI/', include(StockAPIUrls)),
+    path('StockAPI/', include('StockAPI.urls')),
 
 ]

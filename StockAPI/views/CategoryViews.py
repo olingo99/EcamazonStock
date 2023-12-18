@@ -4,7 +4,7 @@ from rest_framework import status
 # from rest_framework import permissions
 from ..models import Category
 from ..serializers import CategorySerializer
-
+from django.shortcuts import render
 
 class CategoryListAPIView(APIView):
         
@@ -13,8 +13,7 @@ class CategoryListAPIView(APIView):
         List all the Category items
         '''
         categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return render(request, 'category_list.html', {'category_list': categories})
 
     # 2. Create
     def post(self, request, *args, **kwargs):

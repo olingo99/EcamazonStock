@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Wharehouses</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for wharehouse in wharehouse_list %}
+            <tr>
+                <td>{{ wharehouse.WhareHouseId }}</td>
+                <td>{{ wharehouse.WhareHouseName }}</td>
+                <td>{{ wharehouse.WhareHouseLocation }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,29 @@
+<!-- product_list.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- product_list.html -->
+    <h1>Products</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Product Id</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Category</th>
+                <th>Warehouse Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in product_list %}
+            <tr>
+                <td>{{ product.ProductCode }}</td>
+                <td>{{ product.ProductName }}</td>
+                <td>{{ product.Quantity }}</td>
+                <td>{{ product.CategoryId.CategoryId }}</td>
+                <td>{{ product.WhareHouseId.WhareHouseId }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
