@@ -140,6 +140,8 @@ class OrderDetailAPIView(APIView):
                 product = link.ProductId
                 product.Quantity += link.ProductQuantity
                 product.save()
+        request.data['UserId'] = order.UserId
+        request.data['ParcelId'] = order.ParcelId
 
         serializer = OrderSerializer(order, data=request.data)
         if serializer.is_valid():

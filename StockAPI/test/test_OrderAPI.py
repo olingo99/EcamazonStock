@@ -41,9 +41,10 @@ class OrderListAPITests(TestCase):
         order = Order.objects.get()
 
         # Update the order to "Cancelled"
-        response = self.client.put(f'/StockAPI/order/{order.OrderId}', {
+        response = self.client.put(f'/StockAPI/order/{order.OrderId}', json.dumps({
             'State': 'Cancelled'
-        })
+        }), content_type='application/json')
+        # breakpoint()
         self.assertEqual(response.status_code, 200)
 
         # Reload the products from the database
