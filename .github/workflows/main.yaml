@@ -6,6 +6,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: stock
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -24,9 +35,3 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: engelstheo/testactionsdjango:latest

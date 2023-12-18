@@ -80,13 +80,18 @@ WSGI_APPLICATION = 'EcamazonStock.wsgi.application'
 
 host = os.getenv('POSTGRES_HOST', 'localhost')
 port = os.getenv('POSTGRES_PORT', '5432')
+import os
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+if os.getenv('GITHUB_ACTIONS') == 'true':
+    print("This is running in GitHub Actions")
+else:
+    print("This is not running in GitHub Actions")
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -109,16 +114,16 @@ DATABASES = {
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'stock',
-#         'USER': os.getenv('POSTGRES_USER'),
-#         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-#         'HOST': os.getenv('POSTGRES_HOST'),
-#         'PORT': os.getenv('POSTGRES_PORT', 5432)
-#      }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'stock',
+        'USER': os.getenv('POSTGRES_USER', "postgres"),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', "postgres"),
+        'HOST': os.getenv('POSTGRES_HOST', "localhost"),
+        'PORT': os.getenv('POSTGRES_PORT', 5432)
+     }
+}
 
 
 
