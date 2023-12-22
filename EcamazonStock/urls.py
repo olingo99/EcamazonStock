@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from StockAPI import urls as StockAPIUrls
 from django_prometheus import exports
+# from django_prometheus import urls as django_prometheus_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('api-auth/', include('rest_framework.urls')),
     path('StockAPI/', include(StockAPIUrls)),
     path('metrics/', exports.ExportToDjangoView),
+    path('', include('django_prometheus.urls')),
 
 ]
