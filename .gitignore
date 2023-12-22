@@ -15,3 +15,4 @@ StockAPI/test/__pycache__/test_OrderAPI.cpython-310.pyc
 StockAPI/test/__pycache__/test_ProductAPI.cpython-310.pyc
 StockAPI/test/__pycache__/test_WhareHouseAPI.cpython-310.pyc
 *.pyc
+*.pyc

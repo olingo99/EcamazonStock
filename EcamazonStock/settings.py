@@ -95,27 +95,7 @@ else:
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'stock',
-#         'USER': 'test',
-#         'PASSWORD': 'test',
-#         'HOST': host,
-#         'PORT': port,
-#     }
-# }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'stock',
-#         'USER': 'test',
-#         'PASSWORD': 'test',
-#         'HOST': 'postgres-db-service',
-#         'PORT': '5432',
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -128,17 +108,6 @@ DATABASES = {
      }
 }
 
-
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "OPTIONS": {
-#             "service": "my_service",
-#             "passfile": ".my_pgpass",
-#         },
-#     }
-# }
 
 
 # Password validation
