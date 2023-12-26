@@ -4,9 +4,13 @@ from rest_framework import status
 # from rest_framework import permissions
 from ..models import Product
 from ..serializers import ProductSerializer
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics
 
-class ProductListAPIView(APIView):
-    
+class ProductListAPIView(generics.GenericAPIView):
+    serializer_class = ProductSerializer
+
+    @extend_schema(operation_id='listProducts', description='List all the Product items')
     def get(self, request, *args, **kwargs):
         '''
         List all the Product items
@@ -15,6 +19,7 @@ class ProductListAPIView(APIView):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     # 2. Create
+    @extend_schema(operation_id='createProduct', description='Create the Product with given product data')
     def post(self, request, *args, **kwargs):
         '''
         Create the Product with given product data
@@ -32,7 +37,8 @@ class ProductListAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class ProductDetailAPIView(APIView):
+class ProductDetailAPIView(generics.GenericAPIView):
+    serializer_class = ProductSerializer
     def get_object(self, product_id):
         '''
         Helper method to get the object with given product_id, and user_id
@@ -43,6 +49,7 @@ class ProductDetailAPIView(APIView):
             return None
     
     # 3. Retrieve
+    @extend_schema(operation_id='retrieveProduct', description='Retrieve the Product with given product_id')
     def get(self, request, product_id, *args, **kwargs):
         '''
         Retrieve the Product with given product_id
@@ -54,6 +61,7 @@ class ProductDetailAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 4. Update
+    @extend_schema(operation_id='updateProduct', description='Update the Product with given product_id')
     def put(self, request, product_id, *args, **kwargs):
         '''
         Update the Product with given product_id
@@ -75,6 +83,7 @@ class ProductDetailAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     # 5. Delete
+    @extend_schema(operation_id='deleteProduct', description='Delete the Product with given product_id')
     def delete(self, request, product_id, *args, **kwargs):
         '''
         Delete the Product with given product_id
@@ -85,7 +94,11 @@ class ProductDetailAPIView(APIView):
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-class ProdcutFIlterAPIView(APIView):
+class ProdcutFIlterAPIView(generics.GenericAPIView):
+
+    serializer_class = ProductSerializer
+
+    @extend_schema(operation_id='filterProducts', description='Filter the Product with given product data')
     def get(self, request, *args, **kwargs):
         '''
         Filter the Product with given product data

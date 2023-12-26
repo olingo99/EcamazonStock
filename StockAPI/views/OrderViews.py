@@ -10,9 +10,13 @@ from django.db.models import Count
 from django.db.models.functions import Random
 import requests
 import json
-
-class OrderListAPIView(APIView):
-
+from rest_framework import generics
+from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets
+class OrderListAPIView(generics.GenericAPIView):
+    serializer_class = OrderSerializer
+    # operation_id = 'listOrders'
+    @extend_schema(operation_id='listOrders', description='List all the Orders')
     def get(self, request, *args, **kwargs):
         '''
         List all the Orders
@@ -38,6 +42,7 @@ class OrderListAPIView(APIView):
     #         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    @extend_schema(operation_id='createOrder', description='Create the Order with given order data')
     def post(self, request, *args, **kwargs):
         '''
         Create the Order with given order data
@@ -87,7 +92,9 @@ class OrderListAPIView(APIView):
         #     print("Post failed with status code: ", response.status_code)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-class OrderFilterAPIView(APIView):
+class OrderFilterAPIView(generics.GenericAPIView):
+    serializer_class = OrderSerializer
+    @extend_schema(operation_id='filterOrders', description='List all the Orders with given state')
     def get(self, request,querryString, *args, **kwargs):
         '''
         List all the Order items for given requested user
@@ -96,8 +103,8 @@ class OrderFilterAPIView(APIView):
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class OrderDetailAPIView(APIView):
-    
+class OrderDetailAPIView(generics.GenericAPIView):
+    serializer_class = OrderSerializer
     def get_object(self, order_id):
         '''
         Helper method to get the object with given order_id
@@ -108,6 +115,7 @@ class OrderDetailAPIView(APIView):
             return None
         
     # 3. Retrieve
+    @extend_schema(operation_id='retrieveOrder', description='Retrieve the Order with given order_id')
     def get(self, request, orderId, *args, **kwargs):
         '''
         Retrieve the Order with given order_id
@@ -120,7 +128,7 @@ class OrderDetailAPIView(APIView):
             )
         serializer = OrderSerializer(order)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+    @extend_schema(operation_id='updateOrder', description='Update the Order with given order_id')
     def put(self, request, orderId, *args, **kwargs):
         '''
         Update the Order with given order_id
@@ -150,6 +158,7 @@ class OrderDetailAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     # 5. Delete
+    @extend_schema(operation_id='deleteOrder', description='Delete the Order with given order_id')
     def delete(self, request, orderId, *args, **kwargs):
         '''
         Delete the Order with given order_id

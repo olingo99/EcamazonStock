@@ -4,10 +4,13 @@ from rest_framework import status
 # from rest_framework import permissions
 from ..models import Category
 from ..serializers import CategorySerializer
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics
 
+class CategoryListAPIView(generics.GenericAPIView):
+    serializer_class = CategorySerializer
 
-class CategoryListAPIView(APIView):
-        
+    @extend_schema(operation_id='listCategories', description='List all the Category items')
     def get(self, request, *args, **kwargs):
         '''
         List all the Category items
@@ -17,6 +20,7 @@ class CategoryListAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 2. Create
+    @extend_schema(operation_id='createCategory', description='Create the Category with given category data')
     def post(self, request, *args, **kwargs):
         '''
         Create the Category with given category data
@@ -32,7 +36,9 @@ class CategoryListAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CategoryDetailAPIView(APIView):
+class CategoryDetailAPIView(generics.GenericAPIView):
+    serializer_class = CategorySerializer
+
     def get_object(self, category_id):
         '''
         Helper method to get the object with given category_id, and user_id
@@ -43,6 +49,7 @@ class CategoryDetailAPIView(APIView):
             return None
         
     # 3. Retrieve
+    @extend_schema(operation_id='retrieveCategory', description='Retrieve the Category with given category_id')
     def get(self, request, category_id, *args, **kwargs):
         '''
         Retrieve the Category with given category_id
@@ -56,6 +63,7 @@ class CategoryDetailAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 4. Update
+    @extend_schema(operation_id='updateCategory', description='Update the Category with given category_id')
     def put(self, request, category_id, *args, **kwargs):
         '''
         Update the Category with given category_id
@@ -75,6 +83,7 @@ class CategoryDetailAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     # 5. Delete
+    @extend_schema(operation_id='deleteCategory', description='Delete the Category with given category_id')
     def delete(self, request, category_id, *args, **kwargs):
         '''
         Delete the Category with given category_id

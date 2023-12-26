@@ -4,9 +4,13 @@ from rest_framework import status
 # from rest_framework import permissions
 from ..models import WhareHouse
 from ..serializers import WhareHouseSerializer
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics
 
-class WhareHouseListAPIView(APIView):
+class WhareHouseListAPIView(generics.GenericAPIView):
+    serializer_class = WhareHouseSerializer
 
+    @extend_schema(operation_id='listWhareHouses', description='List all the WhareHouse items')
     def get(self, request, *args, **kwargs):
         '''
         List all the WhareHouse items
@@ -16,6 +20,7 @@ class WhareHouseListAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 2. Create
+    @extend_schema(operation_id='createWhareHouse', description='Create the WhareHouse with given wharehouse data')
     def post(self, request, *args, **kwargs):
         '''
         Create the WhareHouse with given wharehouse data
@@ -31,7 +36,9 @@ class WhareHouseListAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class WhareHouseDetailAPIView(APIView):
+class WhareHouseDetailAPIView(generics.GenericAPIView):
+    serializer_class = WhareHouseSerializer
+
     def get_object(self, wharehouse_id):
         '''
         Helper method to get the object with given wharehouse_id, and user_id
@@ -42,6 +49,7 @@ class WhareHouseDetailAPIView(APIView):
             return None
 
     # 3. Retrieve
+    @extend_schema(operation_id='retrieveWhareHouse', description='Retrieve the WhareHouse with given wharehouse_id')
     def get(self, request, wharehouse_id, *args, **kwargs):
         '''
         Retrieve the WhareHouse with given wharehouse_id
@@ -53,6 +61,7 @@ class WhareHouseDetailAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 4. Update
+    @extend_schema(operation_id='updateWhareHouse', description='Update the WhareHouse with given wharehouse_id')
     def put(self, request, wharehouse_id, *args, **kwargs):
         '''
         Update the WhareHouse with given wharehouse_id
@@ -69,6 +78,7 @@ class WhareHouseDetailAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     # 5. Delete
+    @extend_schema(operation_id='deleteWhareHouse', description='Delete the WhareHouse with given wharehouse_id')
     def delete(self, request, wharehouse_id, *args, **kwargs):
         '''
         Delete the WhareHouse with given wharehouse_id

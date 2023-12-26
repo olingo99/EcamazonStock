@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'StockAPI',
-    'django_prometheus'
+    'django_prometheus',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -89,24 +90,24 @@ if os.getenv('GITHUB_ACTIONS') == 'true':
     print("This is running in GitHub Actions")
 else:
     print("This is not running in GitHub Actions")
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'stock',
-        'USER': os.getenv('POSTGRES_USER', "postgres"),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', "postgres"),
-        'HOST': os.getenv('POSTGRES_HOST', "localhost"),
-        'PORT': os.getenv('POSTGRES_PORT', 5432)
-     }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'stock',
+#         'USER': os.getenv('POSTGRES_USER', "postgres"),
+#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', "postgres"),
+#         'HOST': os.getenv('POSTGRES_HOST', "localhost"),
+#         'PORT': os.getenv('POSTGRES_PORT', 5432)
+#      }
+# }
 
 
 
@@ -150,3 +151,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'EcamazonStock API',
+    'DESCRIPTION': 'API for EcamazonStock',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'APPEND_COMPONENTS_REF': True,
+    'displayOperationId': True,
+    # OTHER SETTINGS
+}
