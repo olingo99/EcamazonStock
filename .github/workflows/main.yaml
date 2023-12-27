@@ -44,7 +44,7 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
-      if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)  # Corrected condition
+      if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)  # Corrected condition seems to work
       with:
         context: .
         push: true
