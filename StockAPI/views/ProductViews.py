@@ -4,30 +4,31 @@ from rest_framework import status
 # from rest_framework import permissions
 from ..models import Product
 from ..serializers import ProductSerializer
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics
 
+class ProductListAPIView(generics.GenericAPIView):
+    serializer_class = ProductSerializer
 
-class ProductListAPIView(APIView):
-
+    @extend_schema(operation_id='listProducts', description='List all the Product items')
     def get(self, request, *args, **kwargs):
         '''
-        List all the Product items for given requested user
+        List all the Product items
         '''
-        products = Product.objects.filter(ProductName__contains = "")
-        print(products)
-        products2 = Product.objects.all()
-        print(products2)
+        products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
     # 2. Create
+    @extend_schema(operation_id='createProduct', description='Create the Product with given product data')
     def post(self, request, *args, **kwargs):
         '''
         Create the Product with given product data
         '''
         data = { 
             'Quantity':request.data.get('Quantity'),
-            'Location':request.data.get('Location'),
-            'ProductName':request.data.get('ProductName')
+            'ProductName':request.data.get('ProductName'),
+            'CategoryId':request.data.get('CategoryId'),
+            'WhareHouseId':request.data.get('WhareHouseId'),
         }
         serializer = ProductSerializer(data=data)
         if serializer.is_valid():
@@ -35,19 +36,9 @@ class ProductListAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ProductFilterAPIView(APIView):
-    def get(self, request,querryString, *args, **kwargs):
-        '''
-        List all the Product items for given requested user
-        '''
-        products = Product.objects.filter(ProductName__contains = querryString)
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
     
-
-class ProductDetailAPIView(APIView):
+class ProductDetailAPIView(generics.GenericAPIView):
+    serializer_class = ProductSerializer
     def get_object(self, product_id):
         '''
         Helper method to get the object with given product_id, and user_id
@@ -56,59 +47,70 @@ class ProductDetailAPIView(APIView):
             return Product.objects.get(pk=product_id)
         except Product.DoesNotExist:
             return None
-
+    
     # 3. Retrieve
-    def get(self, request, productId, *args, **kwargs):
+    @extend_schema(operation_id='retrieveProduct', description='Retrieve the Product with given product_id')
+    def get(self, request, product_id, *args, **kwargs):
         '''
-        Retrieves the Product with given product_id
+        Retrieve the Product with given product_id
         '''
-        product_instance = self.get_object(productId)
-        if not product_instance:
-            return Response(
-                {"res": "Object with product id does not exists"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        serializer = ProductSerializer(product_instance)
+        product = self.get_object(product_id)
+        if product is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ProductSerializer(product)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
+    
     # 4. Update
-    def put(self, request, productId, *args, **kwargs):
+    @extend_schema(operation_id='updateProduct', description='Update the Product with given product_id')
+    def put(self, request, product_id, *args, **kwargs):
         '''
-        Updates the product item with given product_id if exists
+        Update the Product with given product_id
         '''
-        print("put")
-        product_instance = self.get_object(productId)
-        if not product_instance:
-            return Response(
-                {"res": "Object with product id does not exists"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        data = {
-            'Path': request.data.get('Path'),
-            'Location': request.data.get('Location'),
-            'User': request.user.id,
-            'Date': request.data.get('Date')
+        product = self.get_object(product_id)
+        if product is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        data = { 
+            'Quantity':request.data.get('Quantity'),
+            'ProductName':request.data.get('ProductName'),
+            'CategoryId':request.data.get('CategoryId'),
+            'WarehouseId':request.data.get('WarehouseId'),
         }
-        serializer = ProductSerializer(instance = product_instance, data=data, partial = True)
+        serializer = ProductSerializer(product, data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
     # 5. Delete
-    def delete(self, request, productId, *args, **kwargs):
+    @extend_schema(operation_id='deleteProduct', description='Delete the Product with given product_id')
+    def delete(self, request, product_id, *args, **kwargs):
         '''
-        Deletes the product item with given product_id if exists
+        Delete the Product with given product_id
         '''
-        product_instance = self.get_object(productId)
-        if not product_instance:
-            return Response(
-                {"res": "Object with product id does not exists"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        product_instance.delete()
-        return Response(
-            {"res": "Object deleted!"},
-            status=status.HTTP_200_OK
-        )
+        product = self.get_object(product_id)
+        if product is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        product.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class ProdcutFIlterAPIView(generics.GenericAPIView):
+
+    serializer_class = ProductSerializer
+
+    @extend_schema(operation_id='filterProducts', description='Filter the Product with given product data')
+    def get(self, request, *args, **kwargs):
+        '''
+        Filter the Product with given product data
+        '''
+        data = { 
+            'Quantity':request.data.get('Quantity'),
+            'ProductName':request.data.get('ProductName'),
+            'CategoryId':request.data.get('CategoryId'),
+            'WarehouseId':request.data.get('WarehouseId'),
+        }
+        data = {key: value for key, value in data.items() if value is not None and value != '' and value != "*"}
+        
+        products = Product.objects.filter(**data)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

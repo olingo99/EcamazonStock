@@ -1,0 +1,8 @@
+{   "Products": [
+    {"ProductCode" : "123456", "Quantity":5},
+    {"ProductCode" : "123457", "Quantity":2}
+    ],
+    "UserId" : "1234567890",
+    "ParcelId" : "1234567890",
+    "OrderId" : "1234567890"
+}

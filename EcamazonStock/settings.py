@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-!@$bys(19jfryshd8&tc7-xpl#vtqko$uw_6m%e4)gbu=^^h%(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,10 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'StockAPI'
+    'StockAPI',
+    'django_prometheus',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'EcamazonStock.urls'
@@ -75,12 +80,35 @@ WSGI_APPLICATION = 'EcamazonStock.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
+
+host = os.getenv('POSTGRES_HOST', 'localhost')
+port = os.getenv('POSTGRES_PORT', '5432')
+import os
+
+if os.getenv('GITHUB_ACTIONS') == 'true':
+    print("This is running in GitHub Actions")
+else:
+    print("This is not running in GitHub Actions")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'stock',
+#         'USER': os.getenv('POSTGRES_USER', "postgres"),
+#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', "postgres"),
+#         'HOST': os.getenv('POSTGRES_HOST', "localhost"),
+#         'PORT': os.getenv('POSTGRES_PORT', 5432)
+#      }
+# }
+
 
 
 # Password validation
@@ -123,3 +151,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'EcamazonStock API',
+    'DESCRIPTION': 'API for EcamazonStock',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'APPEND_COMPONENTS_REF': True,
+    'displayOperationId': True,
+    # OTHER SETTINGS
+}

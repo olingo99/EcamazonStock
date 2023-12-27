@@ -1,0 +1,640 @@
+openapi: 3.0.3
+info:
+  title: EcamazonStock API
+  version: 1.0.0
+  description: API for EcamazonStock
+paths:
+  /StockAPI/category:
+    get:
+      operationId: listCategories
+      description: List all the Category items
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    post:
+      operationId: createCategory
+      description: Create the Category with given category data
+      tags:
+      - StockAPI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /StockAPI/category/{category_id}:
+    get:
+      operationId: retrieveCategory
+      description: Retrieve the Category with given category_id
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: updateCategory
+      description: Update the Category with given category_id
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: deleteCategory
+      description: Delete the Category with given category_id
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /StockAPI/handler:
+    get:
+      operationId: listHandlers
+      description: List all the Handler items
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Handler'
+          description: ''
+    post:
+      operationId: createHandler
+      description: Create the Handler with given handler data
+      tags:
+      - StockAPI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Handler'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Handler'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Handler'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Handler'
+          description: ''
+  /StockAPI/handler/{handler_id}:
+    get:
+      operationId: retrieveHandler
+      description: Retrieve the Handler with given handler_id
+      parameters:
+      - in: path
+        name: handler_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Handler'
+          description: ''
+    put:
+      operationId: updateHandler
+      description: Update the Handler with given handler_id
+      parameters:
+      - in: path
+        name: handler_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Handler'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Handler'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Handler'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Handler'
+          description: ''
+    delete:
+      operationId: deleteHandler
+      description: Delete the Handler with given handler_id
+      parameters:
+      - in: path
+        name: handler_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /StockAPI/order:
+      # ...
+      post:
+        operationId: createOrder
+        description: Create the Order with given order data
+        tags:
+        - StockAPI
+        requestBody:
+          required: true
+          content:
+            application/json:  # MIME type goes here
+              schema:  # schema definition starts here
+                type: object
+                properties:
+                  UserId:
+                    type: integer
+                  Products:
+                    type: array
+                    items:
+                      type: object  # each item in the array is an object
+                      properties:
+                        ProductCode:
+                          type: integer
+                        Quantity:
+                          type: integer
+                required:
+                - Products
+                - UserId
+        security:
+        - cookieAuth: []
+        - basicAuth: []
+        - {}
+        responses:
+          '200':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Order'
+            description: ''
+  /StockAPI/order/{orderId}:
+    get:
+      operationId: retrieveOrder
+      description: Retrieve the Order with given order_id
+      parameters:
+      - in: path
+        name: orderId
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    put:
+      operationId: updateOrder
+      description: Update the Order with given order_id
+      parameters:
+      - in: path
+        name: orderId
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    delete:
+      operationId: deleteOrder
+      description: Delete the Order with given order_id
+      parameters:
+      - in: path
+        name: orderId
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /StockAPI/product:
+    get:
+      operationId: listProducts
+      description: List all the Product items
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    post:
+      operationId: createProduct
+      description: Create the Product with given product data
+      tags:
+      - StockAPI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Product'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /StockAPI/wharehouse:
+    get:
+      operationId: listWhareHouses
+      description: List all the WhareHouse items
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhareHouse'
+          description: ''
+    post:
+      operationId: createWhareHouse
+      description: Create the WhareHouse with given wharehouse data
+      tags:
+      - StockAPI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WhareHouse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WhareHouse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WhareHouse'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhareHouse'
+          description: ''
+  /StockAPI/wharehouse/{wharehouse_id}:
+    get:
+      operationId: retrieveWhareHouse
+      description: Retrieve the WhareHouse with given wharehouse_id
+      parameters:
+      - in: path
+        name: wharehouse_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhareHouse'
+          description: ''
+    put:
+      operationId: updateWhareHouse
+      description: Update the WhareHouse with given wharehouse_id
+      parameters:
+      - in: path
+        name: wharehouse_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WhareHouse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WhareHouse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WhareHouse'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhareHouse'
+          description: ''
+    delete:
+      operationId: deleteWhareHouse
+      description: Delete the WhareHouse with given wharehouse_id
+      parameters:
+      - in: path
+        name: wharehouse_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - StockAPI
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        CategoryId:
+          type: integer
+          readOnly: true
+        CategoryName:
+          type: string
+          maxLength: 200
+        CategoryDescription:
+          type: string
+          maxLength: 200
+      required:
+      - CategoryDescription
+      - CategoryId
+      - CategoryName
+    Handler:
+      type: object
+      properties:
+        HandlerId:
+          type: integer
+          readOnly: true
+        HandlerName:
+          type: string
+          maxLength: 200
+        HandlerSurname:
+          type: string
+          maxLength: 200
+        HandlerAddress:
+          type: string
+          maxLength: 200
+      required:
+      - HandlerAddress
+      - HandlerId
+      - HandlerName
+      - HandlerSurname
+    Order:
+      type: object
+      properties:
+        OrderId:
+          type: integer
+          readOnly: true
+        UserId:
+          type: integer
+        ParcelId:
+          type: string
+          maxLength: 10
+        Products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductOrderLink'
+          readOnly: true
+      required:
+      - OrderId
+      - ParcelId
+      - Products
+      - UserId
+    Product:
+      type: object
+      properties:
+        ProductCode:
+          type: integer
+          readOnly: true
+        Quantity:
+          type: integer
+        ProductName:
+          type: string
+          maxLength: 200
+        WhareHouseId:
+          type: integer
+        CategoryId:
+          type: integer
+      required:
+      - CategoryId
+      - ProductCode
+      - ProductName
+      - WhareHouseId
+    ProductOrderLink:
+      type: object
+      properties:
+        ProductCode:
+          type: integer
+          readOnly: true
+        Quantity:
+          type: integer
+          readOnly: true
+      required:
+      - ProductCode
+      - Quantity
+    WhareHouse:
+      type: object
+      properties:
+        WhareHouseId:
+          type: integer
+          readOnly: true
+        WhareHouseName:
+          type: string
+          maxLength: 200
+        WhareHouseLocation:
+          type: string
+          maxLength: 200
+      required:
+      - WhareHouseId
+      - WhareHouseLocation
+      - WhareHouseName
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
