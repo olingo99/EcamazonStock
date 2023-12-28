@@ -16,3 +16,17 @@ StockAPI/test/__pycache__/test_ProductAPI.cpython-310.pyc
 StockAPI/test/__pycache__/test_WhareHouseAPI.cpython-310.pyc
 *.pyc
 *.pyc
+db.sqlite3
+EcamazonStock/__pycache__/settings.cpython-310.pyc
+EcamazonStock/__pycache__/urls.cpython-310.pyc
+StockAPI/__pycache__/models.cpython-310.pyc
+StockAPI/__pycache__/serializers.cpython-310.pyc
+StockAPI/__pycache__/urls.cpython-310.pyc
+StockAPI/migrations/__pycache__/0003_category_handler_wharehouse_and_more.cpython-310.pyc
+StockAPI/migrations/__pycache__/0004_alter_order_parcelid.cpython-310.pyc
+StockAPI/migrations/__pycache__/0005_alter_order_state.cpython-310.pyc
+StockAPI/views/__pycache__/CategoryViews.cpython-310.pyc
+StockAPI/views/__pycache__/HandlerViews.cpython-310.pyc
+StockAPI/views/__pycache__/OrderViews.cpython-310.pyc
+StockAPI/views/__pycache__/ProductViews.cpython-310.pyc
+StockAPI/views/__pycache__/WhareHouseViews.cpython-310.pyc
