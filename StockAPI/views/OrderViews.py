@@ -1,21 +1,18 @@
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-# from rest_framework import permissions
 from ..models import Order, Product, OrderProductLink, Handler
-from ..serializers import OrderSerializer, ProductSerializer
+from ..serializers import OrderSerializer
 import hashlib
 import random
 from django.db.models import Count
-from django.db.models.functions import Random
-import requests
-import json
 from rest_framework import generics
 from drf_spectacular.utils import extend_schema
-from rest_framework import viewsets
+
+
+
 class OrderListAPIView(generics.GenericAPIView):
     serializer_class = OrderSerializer
-    # operation_id = 'listOrders'
+
     @extend_schema(operation_id='listOrders', description='List all the Orders')
     def get(self, request, *args, **kwargs):
         '''
@@ -26,22 +23,6 @@ class OrderListAPIView(generics.GenericAPIView):
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    # 2. Create
-    # def post(self, request, *args, **kwargs):
-    #     '''
-    #     Create the Order with given order data
-    #     '''
-    #     data = { 
-    #         'UserId':request.data.get('UserId'),
-    #         'State':request.data.get('State'),
-    #         'ParcelId':request.data.get('ParcelId')
-    #     }
-    #     serializer = OrderSerializer(data=data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     @extend_schema(operation_id='createOrder', description='Create the Order with given order data')
     def post(self, request, *args, **kwargs):
         '''
@@ -66,15 +47,18 @@ class OrderListAPIView(generics.GenericAPIView):
         # Add products to the order
         for item in products:
             product = Product.objects.get(ProductCode=item['ProductCode'])
+
             if product.Quantity < item['Quantity']:
                 return Response({"error": f"Not enough quantity for product {product.ProductCode}"}, status=status.HTTP_400_BAD_REQUEST)
             handler_count = Handler.objects.aggregate(count=Count('HandlerId'))['count']
+
             if handler_count > 0:
                 product.Quantity -= item['Quantity']
                 product.save()
                 random_handler = Handler.objects.order_by('?').first()
                 link = OrderProductLink(OrderId=order, ProductId=product, ProductQuantity=item['Quantity'], HandlerId=random_handler)
                 link.save()
+                
             else:
                 return Response({"error": "No handlers available"}, status=status.HTTP_400_BAD_REQUEST)
 

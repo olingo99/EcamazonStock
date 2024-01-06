@@ -1,7 +1,5 @@
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-# from rest_framework import permissions
 from ..models import Category
 from ..serializers import CategorySerializer
 from drf_spectacular.utils import extend_schema
@@ -55,11 +53,11 @@ class CategoryDetailAPIView(generics.GenericAPIView):
         Retrieve the Category with given category_id
         '''
         category = self.get_object(category_id)
-        # breakpoint()
+
         if category is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = CategorySerializer(category)
-        # breakpoint()
+
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 4. Update
