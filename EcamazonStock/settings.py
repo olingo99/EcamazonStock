@@ -77,11 +77,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'EcamazonStock.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-
-
 host = os.getenv('POSTGRES_HOST', 'localhost')
 port = os.getenv('POSTGRES_PORT', '5432')
 import os
