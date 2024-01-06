@@ -57,7 +57,6 @@ class OrderListAPIView(generics.GenericAPIView):
         List all the Orders
         '''
         orders = Order.objects.all()
-        print(orders)
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -103,17 +102,26 @@ class OrderListAPIView(generics.GenericAPIView):
         serializer = OrderSerializer(order)
 
 
+        
+        # Try to send the order data to an external service
         try:
+            # Convert the order data to JSON
             order_json = json.dumps(serializer.data)
+            # Send a POST request to the external service
             response = requests.post("http://1.2.3.4:8000/example", data=order_json, headers={'Content-Type': 'application/json'}, timeout=5)
 
+            # Check the response status code
             if response.status_code == 200:
+                # If the status code is 200, print a success message
                 print("Post successful")
             else:
+                # If the status code is not 200, print an error message and return an error response
                 print("Post failed with status code: ", response.status_code)
                 return Response({"error": "Post failed"}, status=status.HTTP_400_BAD_REQUEST)
         except RequestException as e:
+            # If a RequestException is caught, check if service retry is enabled
             if SERVICE_RETRY_ENABLED:
+                # If service retry is enabled, print an error message, add the failed request to the retry queue, and return an error response
                 print("Service is unavailable. Error: ", str(e))
                 failed_requests.put({
                     'url': "http://1.2.3.4:8000/example",
@@ -122,7 +130,9 @@ class OrderListAPIView(generics.GenericAPIView):
                 })
                 return Response({"error": "Service is unavailable, will automatically retry "}, status=status.HTTP_400_BAD_REQUEST)
             else:
+                # If service retry is not enabled, return a Service Unavailable response
                 return Response({"error": "Service is unavailable"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     

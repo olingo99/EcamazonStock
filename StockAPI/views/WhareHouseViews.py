@@ -1,7 +1,5 @@
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-# from rest_framework import permissions
 from ..models import WhareHouse
 from ..serializers import WhareHouseSerializer
 from drf_spectacular.utils import extend_schema
@@ -69,7 +67,6 @@ class WhareHouseDetailAPIView(generics.GenericAPIView):
         
         wharehouse = self.get_object(wharehouse_id)
         if wharehouse is None:
-            # print("wharehouse not found")
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = WhareHouseSerializer(wharehouse, data=request.data)
         if serializer.is_valid():

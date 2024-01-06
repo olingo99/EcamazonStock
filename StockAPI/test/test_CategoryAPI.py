@@ -39,8 +39,6 @@ class CategoryDetailAPITests(TestCase):
                     CategoryDescription='TestCategoryDescription'
                 ) for _ in range(5)]
                 response = self.client.get(f'/StockAPI/category/{categories[0].CategoryId}')
-                # breakpoint()
-                print(response.data)
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data['CategoryName'], 'TestCategoryName')
                 self.assertEqual(response.data['CategoryDescription'], 'TestCategoryDescription')

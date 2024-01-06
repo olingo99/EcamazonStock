@@ -60,7 +60,6 @@ class WhareHouseDetailAPITests(TestCase):
             self.assertEqual(WhareHouse.objects.get().WhareHouseLocation, 'TestLocation2')
 
         def test_update_wharehouse_not_found(self):
-            # print("wharehouse put test not found")
             response = self.client.put('/StockAPI/wharehouse/1', {
                 "WhareHouseName": "TestName2",
                 "WhareHouseLocation": "TestLocation2"
