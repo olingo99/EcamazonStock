@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Handlers</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Handler Id</th>
+                <th>Handler Name</th>
+                <th>Surname</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for handler in handler_list %}
+            <tr>
+                <td>{{ handler.HandlerId }}</td>
+                <td>{{ handler.HandlerName }}</td>
+                <td>{{ handler.HandlerSurname }}</td>
+                <td>{{ handler.HandlerAddress }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
