@@ -7,14 +7,16 @@ import random
 from django.db.models import Count
 from rest_framework import generics
 from drf_spectacular.utils import extend_schema
-
-
-
 import threading
 import queue
 import time
 import requests
 from requests.exceptions import RequestException
+import json
+
+SERVICE_RETRY_ENABLED = False
+
+
 
 failed_requests = queue.Queue()
 
@@ -35,9 +37,9 @@ def retry_failed_requests():
                 failed_requests.put(request)
         time.sleep(3600)  # Wait for 60 seconds before retrying
 
-
-retry_thread = threading.Thread(target=retry_failed_requests)
-retry_thread.start()
+if SERVICE_RETRY_ENABLED:
+    retry_thread = threading.Thread(target=retry_failed_requests)
+    retry_thread.start()
 
 
 
@@ -111,13 +113,17 @@ class OrderListAPIView(generics.GenericAPIView):
                 print("Post failed with status code: ", response.status_code)
                 return Response({"error": "Post failed"}, status=status.HTTP_400_BAD_REQUEST)
         except RequestException as e:
-            print("Service is unavailable. Error: ", str(e))
-            failed_requests.put({
-                'url': "http://1.2.3.4:8000/example",
-                'data': order_json,
-                'headers': {'Content-Type': 'application/json'}
-            })
-            return Response({"error": "Service is unavailable, will automatically retry "}, status=status.HTTP_400_BAD_REQUEST)
+            if SERVICE_RETRY_ENABLED:
+                print("Service is unavailable. Error: ", str(e))
+                failed_requests.put({
+                    'url': "http://1.2.3.4:8000/example",
+                    'data': order_json,
+                    'headers': {'Content-Type': 'application/json'}
+                })
+                return Response({"error": "Service is unavailable, will automatically retry "}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"error": "Service is unavailable"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class OrderFilterAPIView(generics.GenericAPIView):
