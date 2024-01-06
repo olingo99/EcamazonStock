@@ -10,6 +10,42 @@ from drf_spectacular.utils import extend_schema
 
 
 
+import threading
+import queue
+import time
+import requests
+from requests.exceptions import RequestException
+
+failed_requests = queue.Queue()
+
+
+def retry_failed_requests():
+    while True:
+        if not failed_requests.empty():
+            request = failed_requests.get()
+            try:
+                response = requests.post(request['url'], data=request['data'], headers=request['headers'], timeout=5)
+                if response.status_code == 200:
+                    print("Retry successful")
+                else:
+                    print("Retry failed with status code: ", response.status_code)
+                    failed_requests.put(request)
+            except RequestException as e:
+                print("Service is still unavailable. Error: ", str(e))
+                failed_requests.put(request)
+        time.sleep(3600)  # Wait for 60 seconds before retrying
+
+
+retry_thread = threading.Thread(target=retry_failed_requests)
+retry_thread.start()
+
+
+
+
+
+
+
+
 class OrderListAPIView(generics.GenericAPIView):
     serializer_class = OrderSerializer
 
@@ -65,15 +101,23 @@ class OrderListAPIView(generics.GenericAPIView):
         serializer = OrderSerializer(order)
 
 
-        # order_json = json.dumps(serializer.data)
+        try:
+            order_json = json.dumps(serializer.data)
+            response = requests.post("http://1.2.3.4:8000/example", data=order_json, headers={'Content-Type': 'application/json'}, timeout=5)
 
-        # response = requests.post("http://tempurl/postorder", data=order_json, headers={'Content-Type': 'application/json'})
-
-        # # Check the response
-        # if response.status_code == 200:
-        #     print("Post successful")
-        # else:
-        #     print("Post failed with status code: ", response.status_code)
+            if response.status_code == 200:
+                print("Post successful")
+            else:
+                print("Post failed with status code: ", response.status_code)
+                return Response({"error": "Post failed"}, status=status.HTTP_400_BAD_REQUEST)
+        except RequestException as e:
+            print("Service is unavailable. Error: ", str(e))
+            failed_requests.put({
+                'url': "http://1.2.3.4:8000/example",
+                'data': order_json,
+                'headers': {'Content-Type': 'application/json'}
+            })
+            return Response({"error": "Service is unavailable, will automatically retry "}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class OrderFilterAPIView(generics.GenericAPIView):
